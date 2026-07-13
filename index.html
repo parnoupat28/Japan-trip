@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
     
-    <!-- ขุมพลังรัน React/Tailwind บนบราวเซอร์ตรงๆ -->
+    <!-- โหลด React และ Tailwind CSS พรีเมียม -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,27 +13,16 @@
 </head>
 <body class="bg-slate-900 text-slate-100">
 
+    <!-- จุดฝังตัวแอป -->
     <div id="root"></div>
 
-    <!-- สคริปต์เวทมนตร์แปลงร่างโมดูลจากไฟล์ app.js -->
-    <script type="text/babel" data-plugins="transform-modules-umd" src="app.js"></script>
-
-    <!-- สคริปต์สั่งเรนเดอร์ตัวแอปแยกส่วนป้องกันคนลบพัง -->
+    <!-- โดดไปดึงโค้ดดิบจาก app.js มารันหน้างานตรงนี้เลย -->
     <script type="text/babel">
-        // รอให้ไฟล์ app.js โหลดเสร็จแล้วจับเรนเดอร์ทันที
-        window.addEventListener('load', () => {
-            const AppToRender = window.App || encodeReactApp;
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(React.createElement(AppToRender));
-        });
-
-        function encodeReactApp() {
-            return (
-                <div class="p-8 text-center text-slate-400">
-                    <p>⚠ กำลังโหลดแอปหรือไฟล์ app.js ของเทอยังว่างอยู่จ้า...</p>
-                </div>
-            );
-        }
+        // บังคับดึงข้อมูลฟังก์ชันจากตัวแปรสากลที่เซ็ตไว้ใน app.js
+        const { useState, useEffect } = React;
     </script>
+    
+    <!-- ดึงไฟล์ app.js มาประมวลผลด้วยสเปก Babel ตรงๆ -->
+    <script type="text/babel" src="app.js"></script>
 </body>
 </html>
