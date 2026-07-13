@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-export default function App() {
+function App() {
   // Application State
   const [activeTab, setActiveTab] = useState('dashboard');
   const [activeDay, setActiveDay] = useState(0);
