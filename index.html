@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
     
+    <!-- ขุมพลังรัน React/Tailwind บนบราวเซอร์ตรงๆ -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,30 +15,25 @@
 
     <div id="root"></div>
 
-    <script type="text/babel" data-plugins="transform-modules-umd">
-        
-        // ----------------------------------------------------
-        // 📥 [พื้นที่สำหรับ PASTE] ได้โค้ดจาก Canvas มาเมื่อไหร่
-        // วางครอบทับตั้งแต่บรรทัดนี้ ยาวลงไปได้เลยเทอ!
-        // ----------------------------------------------------
+    <!-- สคริปต์เวทมนตร์แปลงร่างโมดูลจากไฟล์ app.js -->
+    <script type="text/babel" data-plugins="transform-modules-umd" src="app.js"></script>
 
-        import React, { useState, useEffect } from 'react';
+    <!-- สคริปต์สั่งเรนเดอร์ตัวแอปแยกส่วนป้องกันคนลบพัง -->
+    <script type="text/babel">
+        // รอให้ไฟล์ app.js โหลดเสร็จแล้วจับเรนเดอร์ทันที
+        window.addEventListener('load', () => {
+            const AppToRender = window.App || encodeReactApp;
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(React.createElement(AppToRender));
+        });
 
-        export default function App() {
-          return (
-            <div className="p-8 text-center">
-              <h1 className="text-2xl font-bold text-cyan-400">❄️ ตู้คอนเทนเนอร์ Env พร้อมรบแล้วเทอ!</h1>
-              <p className="text-slate-400 mt-2 text-sm">ถ้าได้โค้ดเต็มๆ จาก Canvas มาแล้ว กด Edit ไฟล์นี้ แล้วเอามาวางแทนที่ตรงนี้ได้เลยจ้า</p>
-            </div>
-          );
+        function encodeReactApp() {
+            return (
+                <div class="p-8 text-center text-slate-400">
+                    <p>⚠ กำลังโหลดแอปหรือไฟล์ app.js ของเทอยังว่างอยู่จ้า...</p>
+                </div>
+            );
         }
-
-        // ----------------------------------------------------
-        // 📤 [ห้ามลบ 2 บรรทัดล่างสุดนี้เด็ดขาดนะเทอ]
-        // ----------------------------------------------------
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
-
     </script>
 </body>
 </html>
