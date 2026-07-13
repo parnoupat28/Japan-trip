@@ -5,24 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
     
-    <!-- โหลด React และ Tailwind CSS พรีเมียม -->
+    <!-- โหลดขุมพลัง React/Tailwind/Babel บนบราวเซอร์ตรงๆ -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ปลั๊กอินพิเศษดักลบคำว่า import/export อัตโนมัติหน้างาน -->
+    <script>
+      Babel.registerPlugin('fake-modules', function(babel) {
+        return {
+          visitor: {
+            ImportDeclaration(path) { path.remove(); },
+            ExportDefaultDeclaration(path) {
+              if (path.node.declaration.type === 'FunctionDeclaration') {
+                path.replaceWith(path.node.declaration);
+              }
+            }
+          }
+        };
+      });
+    </script>
 </head>
 <body class="bg-slate-900 text-slate-100">
 
-    <!-- จุดฝังตัวแอป -->
     <div id="root"></div>
 
-    <!-- โดดไปดึงโค้ดดิบจาก app.js มารันหน้างานตรงนี้เลย -->
+    <!-- รันไฟล์ app.js ผ่านปลั๊กอินพิเศษรื้อถอนคำสั่งบิวด์ -->
+    <script type="text/babel" data-plugins="fake-modules" src="app.js"></script>
+
+    <!-- สั่งเรนเดอร์เงียบๆ อยู่เบื้องหลัง -->
     <script type="text/babel">
-        // บังคับดึงข้อมูลฟังก์ชันจากตัวแปรสากลที่เซ็ตไว้ใน app.js
-        const { useState, useEffect } = React;
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const { useState, useEffect } = React;
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(React.createElement(App));
+            }, 200);
+        });
     </script>
-    
-    <!-- ดึงไฟล์ app.js มาประมวลผลด้วยสเปก Babel ตรงๆ -->
-    <script type="text/babel" src="app.js"></script>
 </body>
 </html>
