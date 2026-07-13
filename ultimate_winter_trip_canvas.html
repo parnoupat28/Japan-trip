@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คัมภีร์ลุยหิมะฉบับพกพา: Nagoya-Toyama 2027</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #fcfaf7; color: #334155; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; height: 300px; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .tab-active { border-bottom: 3px solid #3b82f6; color: #1d4ed8; font-weight: 600; }
+        .day-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-lg rounded-b-3xl">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2 text-center">คัมภีร์ลุยหิมะฉบับพกพา ☃️</h1>
+            <p class="text-center text-blue-100 opacity-90">นาโกย่า - โทยามะ | 9 วัน 8 คืน (22-30 ม.ค. 2570)</p>
+            <div class="flex justify-center gap-4 mt-4 text-sm font-light">
+                <span class="bg-white/20 px-3 py-1 rounded-full">👨‍👩‍👦 3 คน</span>
+                <span class="bg-white/20 px-3 py-1 rounded-full">🚌 ขนส่ง 100%</span>
+                <span class="bg-white/20 px-3 py-1 rounded-full">💰 ~173.5k THB</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-6">
+        
+        <section class="mb-8 text-center p-4">
+            <p class="text-slate-600 leading-relaxed italic">
+                ยินดีต้อนรับคุณหมอบันและครอบครัวเข้าสู่แอปพลิเคชันคัมภีร์นำทางส่วนตัว! 
+                หน้านี้จะช่วยรวบรวมทุกข้อมูลสำคัญ ตั้งแต่แผนการจองล่วงหน้า 
+                ไปจนถึงตารางเดินรถไฟและพิกัดซีฟู้ดที่คุณต้องหลงรัก 
+                ใช้แถบเมนูด้านล่างเพื่อสำรวจส่วนต่างๆ ของทริปได้เลยครับ
+            </p>
+        </section>
+
+        <nav class="flex overflow-x-auto border-b border-slate-200 mb-8 sticky top-0 bg-[#fcfaf7] z-10 no-scrollbar">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-6 py-3 whitespace-nowrap tab-active">แดชบอร์ด</button>
+            <button onclick="switchTab('booking')" id="btn-booking" class="px-6 py-3 whitespace-nowrap">แผนการจอง</button>
+            <button onclick="switchTab('itinerary')" id="btn-itinerary" class="px-6 py-3 whitespace-nowrap">แผนรายวัน</button>
+            <button onclick="switchTab('packing')" id="btn-packing" class="px-6 py-3 whitespace-nowrap">เตรียมกระเป๋า</button>
+            <button onclick="switchTab('budget')" id="btn-budget" class="px-6 py-3 whitespace-nowrap">งบประมาณ</button>
+        </nav>
+
+        <section id="tab-dashboard" class="tab-content block">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-2xl shadow-sm border-l-4 border-orange-400">
+                    <h3 class="font-bold text-lg mb-2">📌 ข้อมูลด่วนสำหรับคุณหมอ</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between"><span>อุณหภูมิเฉลี่ย:</span> <span class="font-semibold text-blue-600">-2°C ถึง 6°C</span></li>
+                        <li class="flex justify-between"><span>โรงแรมหลัก:</span> <span class="font-semibold text-slate-700">Nono / Mercure</span></li>
+                        <li class="flex justify-between"><span>สไตล์การนอน:</span> <span class="font-semibold text-green-600">Hollywood Twin</span></li>
+                        <li class="flex justify-between"><span>คีย์การเดินทาง:</span> <span class="font-semibold text-slate-700">IC Card (แตะจ่าย)</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-sm border-l-4 border-blue-400">
+                    <h3 class="font-bold text-lg mb-2">🍱 ไฮไลท์ห้ามพลาด</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-200 text-xs">ปูหิมะแดง</span>
+                        <span class="bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-200 text-xs">ปลาไหลย่าง</span>
+                        <span class="bg-green-50 text-green-700 px-2 py-1 rounded border border-green-200 text-xs">สวนสัตว์หิมะ</span>
+                        <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded border border-purple-200 text-xs">ออนเซนส่วนตัว</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <h3 class="text-xl font-bold mb-4 text-center text-slate-800">💰 ภาพรวมงบประมาณ (~173,500 THB)</h3>
+                <p class="text-xs text-slate-500 text-center mb-4">แสดงสัดส่วนค่าใช้จ่ายหลัก 3 คนตลอดทริป</p>
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-booking" class="tab-content hidden">
+            <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-sm">
+                <p><strong>💡 คำแนะนำ:</strong> ตั้ง Reminder ในมือถือล่วงหน้า 1 วันตามวันที่ระบุด้านล่าง เพื่อจองที่นั่งรถไฟฝั่งชมวิวที่ดีที่สุด (แถว D ขาไป / แถว A ขากลับ)</p>
+            </div>
+            <div class="space-y-6">
+                <div class="flex gap-4">
+                    <div class="flex-none w-24 text-right font-bold text-blue-600 pt-1">มิ.ย.-ก.ค. 69</div>
+                    <div class="flex-grow pb-8 border-l-2 border-blue-200 pl-6 relative">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-blue-600 rounded-full"></div>
+                        <h4 class="font-bold">จองตั๋วเครื่องบิน (บินตรง)</h4>
+                        <p class="text-sm text-slate-500">Thai Airways / AirAsia X (ไป 22 ม.ค. กลับ 30 ม.ค.)</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-none w-24 text-right font-bold text-blue-600 pt-1">ส.ค. 69</div>
+                    <div class="flex-grow pb-8 border-l-2 border-blue-200 pl-6 relative">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-blue-600 rounded-full"></div>
+                        <h4 class="font-bold">จองโรงแรม (Hollywood Twin)</h4>
+                        <ul class="text-sm text-slate-600 list-disc ml-4 mt-1">
+                            <li>Onyado Nono Toyama</li>
+                            <li>Mercure Nagoya</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-none w-24 text-right font-bold text-red-500 pt-1">22 ธ.ค. 69</div>
+                    <div class="flex-grow pl-6 relative">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-red-500 rounded-full"></div>
+                        <h4 class="font-bold">กดตั๋วรถไฟ JR Hida</h4>
+                        <p class="text-sm text-slate-500">ระบบเปิด 08:00 น. (ไทย) ผ่านเว็บ JR-West / JR-Central</p>
+                        <p class="text-xs text-orange-600 font-semibold mt-1">⚠️ จองแถว D (ขาไป) และ แถว A (ขากลับ)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-itinerary" class="tab-content hidden">
+            <div class="mb-4">
+                <p class="text-sm text-slate-600 mb-4">คลิกเลือกวันที่ เพื่อดูรายละเอียดแผนการเดินทาง ร้านแนะนำ และพิกัด Google Maps ครับ</p>
+                <div class="flex flex-wrap gap-2 justify-center" id="day-selector"></div>
+            </div>
+            <div id="day-details" class="glass-card p-6 rounded-3xl shadow-md min-h-[400px] border border-white"></div>
+        </section>
+
+        <section id="tab-packing" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-blue-800">📦 แพ็คจากไทย (Checklist)</h3>
+                    <div id="packing-thai" class="space-y-2"></div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-orange-800">🛒 ซื้อที่ญี่ปุ่น (Must Buy)</h3>
+                    <div id="packing-japan" class="space-y-2"></div>
+                    <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <h4 class="font-bold text-blue-800 text-sm mb-2">💡 ทริคเด็ดของน้องภรัณ</h4>
+                        <p class="text-xs text-slate-600">แวะร้าน 100 เยน สอย "แม่พิมพ์ปั้นหิมะรูปเป็ด" ทันทีที่ถึงโทยามะ รับรองน้องสนุกจนลืมหนาวครับ!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-budget" class="tab-content hidden">
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-100 text-slate-700 uppercase">
+                        <tr>
+                            <th class="px-4 py-3">รายการ</th>
+                            <th class="px-4 py-3">งบ (บาท)</th>
+                            <th class="px-4 py-3">จ่ายผ่าน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="budget-table-body" class="divide-y divide-slate-200"></tbody>
+                </table>
+            </div>
+            <div class="mt-6 p-4 bg-green-50 rounded-xl text-center">
+                <p class="text-lg font-bold text-green-800">รวมทั้งหมด: ~173,500 บาท</p>
+                <p class="text-sm text-green-600">(เฉลี่ยคนละ 57,833 บาท)</p>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 flex justify-around shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-20">
+        <button onclick="showEmergencyModal()" class="flex flex-col items-center text-red-500 font-semibold">
+            <span class="text-xl">🚨</span>
+            <span class="text-[10px]">ฉุกเฉิน</span>
+        </button>
+        <button onclick="copyPrompt('food')" class="flex flex-col items-center text-slate-600">
+            <span class="text-xl">🔍</span>
+            <span class="text-[10px]">หาร้าน</span>
+        </button>
+        <button onclick="copyPrompt('bus')" class="flex flex-col items-center text-slate-600">
+            <span class="text-xl">🚌</span>
+            <span class="text-[10px]">ถามบัส</span>
+        </button>
+        <button onclick="copyPrompt('request')" class="flex flex-col items-center text-slate-600">
+            <span class="text-xl">🏨</span>
+            <span class="text-[10px]">ขอนอนชิด</span>
+        </button>
+    </div>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-black/50 hidden z-30 flex items-center justify-center p-4" onclick="closeModal()">
+        <div id="modal-content" class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <script>
+        const budgetData = [
+            { item: "✈️ ตั๋วเครื่องบิน (3 คน)", cost: 60000, method: "Credit Card (Pre)" },
+            { item: "🏨 โรงแรม (8 คืน)", cost: 48000, method: "Credit Card (Pre)" },
+            { item: "🚄 เดินทาง (JR/Local)", cost: 18500, method: "IC Card / Cash" },
+            { item: "🍱 อาหาร & ขนม", cost: 30000, method: "Card / Cash" },
+            { item: "🦁 ค่าเข้าสถานที่", cost: 7000, method: "IC Card / Cash" },
+            { item: "🛍️ ช้อปปิ้ง (On Cloud)", cost: 10000, method: "Credit Card" }
+        ];
+
+        const itinerary = [
+            { day: 0, title: "ศุกร์ 22 ม.ค.", subtitle: "เตรียมบินข้ามคืน", details: "• 22:00 น. รวมตัวสุวรรณภูมิ โหลดกระเป๋า<br>• บินตรงสู่ Nagoya (หลับพักผ่อนให้เต็มที่)", location: "https://www.google.com/maps/search/?api=1&query=Suvarnabhumi+Airport", pay: "จ่ายล่วงหน้าแล้ว" },
+            { day: 1, title: "เสาร์ 23 ม.ค.", subtitle: "วาร์ปสู่โทยามะ", details: "• 08:00 แลนดิ้ง NGO / นั่ง μ-SKY เข้าเมือง<br>• 10:30 ทำบัตร Toica เด็กให้น้องภรัณ (สถานี Nagoya)<br>• 11:45 นั่ง JR Hida (จองแถว D) ส่องวิวหุบเขา<br>• 15:45 เช็คอิน Onyado Nono (ออนเซนบ่อหิน)<br>• 18:00 มื้อเย็น: 🦀 ปูหิมะแดง @ MAROOT", location: "https://www.google.com/maps/search/?api=1&query=Onyado+Nono+Toyama+Natural+Hot+Spring", pay: "μ-SKY (รูดบัตร), Toica (เงินสด), มื้อเย็น (รูดบัตร)" },
+            { day: 2, title: "อาทิตย์ 24 ม.ค.", subtitle: "ปราสาท & ปั้นหิมะ", details: "• 08:00 ถล่มบุฟเฟ่ต์ไข่ปลาแซลมอน<br>• 10:00 สงครามปั้นหิมะ ณ สวนปราสาทโทยามะ<br>• 14:00 หลบหนาวห้าง MAROOT หยอดกาชาปอง<br>• 17:30 ส่องอุโมงค์ไฟ (Snowpiad) หน้าสถานี<br>• มื้อเย็น: ราเมงซุปดำพริกไทยจัดจ้าน", location: "https://www.google.com/maps/search/?api=1&query=Toyama+Castle+Ruin+Park", pay: "กาชาปอง (เหรียญ), ราเมง (ตู้กดเงินสด)" },
+            { day: 3, title: "จันทร์ 25 ม.ค.", subtitle: "บุกสวนสัตว์ Family Park", details: "• 09:30 ขึ้นบัสชานชาลา 16 (ฝั่งสถานีโทยามะ)<br>• 10:15 ตะลุยหิมะสวนสัตว์ ดูนกไรโช/เสือขาว<br>• 15:00 แช่ออนเซนโรงแรมพักขา<br>• 18:00 มื้อเย็น: 🍲 ชาบูหมูดำโทยามะ ย่าน Sogawa", location: "https://www.google.com/maps/search/?api=1&query=Toyama+City+Family+Park", pay: "บัส (แตะ IC), สวนสัตว์ (แตะ IC/เงินสด)" },
+            { day: 4, title: "อังคาร 26 ม.ค.", subtitle: "กลับนาโกย่า (รร. Mercure)", details: "• 10:00 รถไฟ Hida กลับนาโกย่า (จองแถว A)<br>• 14:00 เช็คอิน Mercure Nagoya (ใกล้สถานี 4 นาที)<br>• 15:30 เดินทางเชื่อมใต้ดินสถานีรถไฟ อุ่นสบาย<br>• 18:00 มื้อเย็น: หมูทอดคัตสึพรีเมียม", location: "https://www.google.com/maps/search/?api=1&query=The+Cypress+Mercure+Hotel+Nagoya", pay: "มื้อเย็น (รูดบัตร), รถไฟ (Prepaid)" },
+            { day: 5, title: "พุธ 27 ม.ค.", subtitle: "วาฬเพชฌฆาต & เบาะอุ่น", details: "• 08:30 มื้อเช้าสไตล์นาโกย่า (Komeda's ถั่วแดง)<br>• 10:15 Nagoya Aquarium ดูโชว์โลมา (เบาะฮีตเตอร์)<br>• ส่องพายุฝูงปลาซาร์ดีนล้านตัว<br>• 18:30 มื้อเย็น: 🐷 หมูกระทะร้อนซอสมิโซะ Yabaton", location: "https://www.google.com/maps/search/?api=1&query=Port+of+Nagoya+Public+Aquarium", pay: "อควาเรียม (รูดบัตร), รถไฟใต้ดิน (แตะ IC)" },
+            { day: 6, title: "พฤหัส 28 ม.ค.", subtitle: "สวนสัตว์ Higashiyama", details: "• 10:00 ส่องกอริลลาหน้าหล่อ (Shabani)<br>• พาน้องภรัณลานอุ้มหนูแกสบี้ปุย<br>• 14:30 บ่ายนอนพักเตียงกว้าง Mercure<br>• 18:00 มื้อเย็น: 🍱 ข้าวหน้าปลาไหล Hitsumabushi", location: "https://www.google.com/maps/search/?api=1&query=Higashiyama+Zoo+and+Botanical+Gardens", pay: "ปลาไหล (รูดบัตร - แนะนำร้าน Atsuta Horaiken)" },
+            { day: 7, title: "ศุกร์ 29 ม.ค.", subtitle: "Oasis 21 & ล่า On Cloud", details: "• 09:30 ตลาดโบราณ Osu แทะดังโงะหลบลมหนาว<br>• 14:30 ถ่ายภาพยานอวกาศ Oasis 21<br>• 17:00 สอยรองเท้า On Cloud ตึก Bic Camera (Tax-Free)<br>• 18:30 ปาร์ตี้ปีกไก่ Sekai no Yamachan บนห้องพัก", location: "https://www.google.com/maps/search/?api=1&query=Oasis+21+Nagoya", pay: "ปีกไก่ (รูดบัตร), รองเท้า (รูดบัตร/พาสปอร์ต)" },
+            { day: 8, title: "เสาร์ 30 ม.ค.", subtitle: "โบอิ้งลำยักษ์ & บินกลับ", details: "• 09:30 μ-SKY สู่สนามบิน NGO<br>• 10:15 ปล่อยพลัง @ Flight of Dreams (ปีนปีกโบอิ้ง)<br>• 16:00 เหินฟ้ากลับไทยโดยสวัสดิภาพ", location: "https://www.google.com/maps/search/?api=1&query=Flight+of+Dreams+Chubu+Centrair", pay: "ขนมสนามบิน (IC Card/เงินสด)" }
+        ];
+
+        const packingItems = {
+            thai: ["ฮีทเทค Ultra Warm (3 ชุด)", "เสื้อขนเป็ดกันลม/หิมะ", "ถุงมือลุยหิมะกันน้ำ (น้องภรัณ)", "แว่นกันแดด", "ยาสามัญเด็ก"],
+            japan: ["แผ่นอุ่น Kairo แปะตัว", "แผ่นร้อนแปะถุงเท้า", "แฮนด์ครีมสูตรหนา", "แม่พิมพ์ปั้นหิมะรูปเป็ด"]
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('tab-active'));
+            document.getElementById(`btn-${tabId}`).classList.add('tab-active');
+        }
+
+        function renderBudget() {
+            const tbody = document.getElementById('budget-table-body');
+            budgetData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="px-4 py-3">${row.item}</td><td class="px-4 py-3 font-semibold">${row.cost.toLocaleString()}</td><td class="px-4 py-3 text-slate-500">${row.method}</td>`;
+                tbody.appendChild(tr);
+            });
+            new Chart(document.getElementById('budgetChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: budgetData.map(d => d.item.split(' ')[1] || d.item),
+                    datasets: [{
+                        data: budgetData.map(d => d.cost),
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+            });
+        }
+
+        function renderItinerary(dayIdx = 1) {
+            const selector = document.getElementById('day-selector');
+            selector.innerHTML = '';
+            itinerary.forEach((item, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `day-btn px-3 py-2 rounded-xl border text-xs font-medium transition-all ${idx === dayIdx ? 'active' : 'bg-white text-slate-600 border-slate-200'}`;
+                btn.innerText = `Day ${item.day}`;
+                btn.onclick = () => renderItinerary(idx);
+                selector.appendChild(btn);
+            });
+            const data = itinerary[dayIdx];
+            document.getElementById('day-details').innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <div><h4 class="text-indigo-800 font-bold text-lg">${data.title}</h4><p class="text-slate-500 text-sm">✨ ${data.subtitle}</p></div>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs">วันที่ ${data.day}</span>
+                </div>
+                <div class="space-y-4 text-slate-700 leading-relaxed">
+                    <p class="text-sm">${data.details}</p>
+                    <div class="pt-4 border-t border-slate-100">
+                        <p class="text-xs font-bold text-orange-600 mb-1">💰 วิธีจ่ายวันนี้:</p>
+                        <p class="text-xs text-slate-500">${data.pay}</p>
+                    </div>
+                    <a href="${data.location}" target="_blank" class="inline-block mt-4 w-full text-center bg-indigo-600 text-white py-3 rounded-2xl text-sm font-medium shadow-md active:bg-indigo-700">📍 เปิด Google Maps</a>
+                </div>
+            `;
+        }
+
+        function renderPacking() {
+            ['thai', 'japan'].forEach(type => {
+                const div = document.getElementById(`packing-${type}`);
+                packingItems[type].forEach(item => {
+                    div.innerHTML += `<label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-100 shadow-sm"><input type="checkbox" class="w-4 h-4 rounded text-blue-600"><span class="text-sm">${item}</span></label>`;
+                });
+            });
+        }
+
+        function showEmergencyModal() {
+            const overlay = document.getElementById('modal-overlay');
+            overlay.classList.remove('hidden');
+            document.getElementById('modal-content').innerHTML = `
+                <h3 class="text-red-600 font-bold text-xl mb-4 text-center">🚨 แผนรับมือฉุกเฉิน</h3>
+                <div class="space-y-4 text-sm text-slate-600">
+                    <p><strong>1. พายุหิมะหนัก:</strong> รถรางโทยามะอาจหยุดวิ่ง ให้เปลี่ยนไปเที่ยวห้าง MAROOT ชั้น 1-4 แทน กิจกรรมอินดอร์ปลอดภัยที่สุด</p>
+                    <p><strong>2. รถไฟ Hida ดีเลย์:</strong> ใช้ Hokuriku Shinkansen แทนเพื่อกลับนาโกย่า (ทนหิมะได้ดีกว่า) ติดต่อพนักงานสถานี JR</p>
+                    <p><strong>3. น้องภรัณมีไข้:</strong> ร้านขายยา MatsuKiyo ในสถานีมีเภสัชกร หรือแจ้งโรงแรมช่วยติดต่อคลินิกที่พูดอังกฤษได้</p>
+                </div>
+                <button onclick="closeModal()" class="mt-6 w-full py-3 bg-slate-100 rounded-xl font-bold">ตกลง</button>
+            `;
+        }
+
+        function copyPrompt(type) {
+            let text = "";
+            if(type === 'food') text = "ปูโทยามะห้าง MAROOT สดๆ ราคาคุมงบและคนไม่เยอะ มีร้านไหนแนะนำบ้าง";
+            if(type === 'bus') text = "ตอนนี้อยู่ที่สถานี Toyama จะขึ้นรถบัสป้ายชานชาลาที่ 16 ไปสวนสัตว์ Family Park ต้องขึ้นฝั่งไหน แตะจ่ายบัตรตอนขึ้นหรือตอนลง";
+            if(type === 'request') text = "Please arrange Hollywood Twin style (push two twin beds together) and request a bed guard for my child.";
+            navigator.clipboard.writeText(text);
+            alert("คัดลอกประโยคแล้ว! นำไปถาม AI หรือพนักงานได้เลย:\n\n" + text);
+        }
+
+        function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+
+        window.onload = () => { renderBudget(); renderItinerary(); renderPacking(); };
+    </script>
+</body>
+</html>
