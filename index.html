@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
     
+    <!-- โหลดขุมพลัง React, Tailwind, และ Babel เวอร์ชันอัปเกรด -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,28 +16,26 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // ดึง Hook ออกมารอไว้ที่สโคปส่วนกลาง
         const { useState, useEffect } = React;
 
         async function launchApp() {
             try {
-                // 1. โดดไปดูดโค้ดดิบจาก app.js (ที่เทอเอาไฟล์ .tsx มาแปะไว้)
-                const response = await fetch('app.js');
+                // 1. วิ่งไปดูดโค้ดดิบจากไฟล์ App.tsx ที่เทอลากลงมาปล่อยโดยตรง!
+                const response = await fetch('App.tsx');
+                if (!response.ok) throw new Error('ยังไม่มีไฟล์ App.tsx ใน Repo หรือหาไฟล์ไม่เจอจ้าเทอ');
                 let code = await response.text();
 
                 // 2. ✂️ ลบพวกคำสั่งระบบมดงาน (import/export) ออกให้เกลี้ยงอัตโนมัติ
                 code = code.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, '');
                 code = code.replace(/export\s+default\s+/g, '');
 
-                // 3. ✨ เวทมนตร์แปลงร่าง: สั่ง Babel แปลงทั้ง TypeScript และ React พร้อมกันหน้างาน!
+                // 3. ✨ แปลงร่างโค้ด TypeScript และ React หน้างานทันที
                 const transformed = Babel.transform(code, { 
-                    presets: ['react', 'typescript'] // 👈 เปิดสวิตช์รีดขุมพลังดักจับไฟล์ .tsx เรียบร้อย!
+                    presets: ['react', 'typescript']
                 }).code;
 
-                // 4. รันโค้ดตัวแอป
+                // 4. รันโค้ดและพ่นคอนเทนต์ลงจอ
                 eval(transformed);
-
-                // 5. พ่นคอนเทนต์ลงหน้าจอสมบูรณ์แบบ
                 const root = ReactDOM.createRoot(document.getElementById('root'));
                 root.render(React.createElement(App));
                 
@@ -44,14 +43,14 @@
                 console.error("เลขาตรวจเจอจุดบั๊ก:", error);
                 document.getElementById('root').innerHTML = `
                     <div class="p-8 text-center text-rose-400">
-                        <p class="font-bold">⚠ เกิดข้อผิดพลาดในการแปลงไฟล์ .tsx จ้าเทอ</p>
+                        <p class="font-bold">⚠ เกิดข้อผิดพลาดจ้าเทอ</p>
                         <p class="text-xs text-slate-500 mt-2">${error.message}</p>
+                        <p class="text-[11px] text-cyan-500 mt-4">💡 วิธีแก้: ลองลากไฟล์ App.tsx โยนลง Repo อีกรอบน้า</p>
                     </div>
                 `;
             }
         }
 
-        // สตาร์ทระบบออโตเมชัน
         launchApp();
     </script>
 </body>
