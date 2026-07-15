@@ -5,44 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
     
-    <!-- โหลดขุมพลัง React/Tailwind/Babel บนบราวเซอร์ตรงๆ -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- ปลั๊กอินพิเศษดักลบคำว่า import/export อัตโนมัติหน้างาน -->
-    <script>
-      Babel.registerPlugin('fake-modules', function(babel) {
-        return {
-          visitor: {
-            ImportDeclaration(path) { path.remove(); },
-            ExportDefaultDeclaration(path) {
-              if (path.node.declaration.type === 'FunctionDeclaration') {
-                path.replaceWith(path.node.declaration);
-              }
-            }
-          }
-        };
-      });
-    </script>
 </head>
 <body class="bg-slate-900 text-slate-100">
 
     <div id="root"></div>
 
-    <!-- รันไฟล์ app.js ผ่านปลั๊กอินพิเศษรื้อถอนคำสั่งบิวด์ -->
-    <script type="text/babel" data-plugins="fake-modules" src="app.js"></script>
-
-    <!-- สั่งเรนเดอร์เงียบๆ อยู่เบื้องหลัง -->
     <script type="text/babel">
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const { useState, useEffect } = React;
+        // ดึง Hook ออกมารอไว้ที่สโคปส่วนกลาง
+        const { useState, useEffect } = React;
+
+        async function launchApp() {
+            try {
+                // 1. โดดไปดูดโค้ดดิบจาก app.js (ที่เทอเอาไฟล์ .tsx มาแปะไว้)
+                const response = await fetch('app.js');
+                let code = await response.text();
+
+                // 2. ✂️ ลบพวกคำสั่งระบบมดงาน (import/export) ออกให้เกลี้ยงอัตโนมัติ
+                code = code.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, '');
+                code = code.replace(/export\s+default\s+/g, '');
+
+                // 3. ✨ เวทมนตร์แปลงร่าง: สั่ง Babel แปลงทั้ง TypeScript และ React พร้อมกันหน้างาน!
+                const transformed = Babel.transform(code, { 
+                    presets: ['react', 'typescript'] // 👈 เปิดสวิตช์รีดขุมพลังดักจับไฟล์ .tsx เรียบร้อย!
+                }).code;
+
+                // 4. รันโค้ดตัวแอป
+                eval(transformed);
+
+                // 5. พ่นคอนเทนต์ลงหน้าจอสมบูรณ์แบบ
                 const root = ReactDOM.createRoot(document.getElementById('root'));
                 root.render(React.createElement(App));
-            }, 200);
-        });
+                
+            } catch (error) {
+                console.error("เลขาตรวจเจอจุดบั๊ก:", error);
+                document.getElementById('root').innerHTML = `
+                    <div class="p-8 text-center text-rose-400">
+                        <p class="font-bold">⚠ เกิดข้อผิดพลาดในการแปลงไฟล์ .tsx จ้าเทอ</p>
+                        <p class="text-xs text-slate-500 mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // สตาร์ทระบบออโตเมชัน
+        launchApp();
     </script>
 </body>
 </html>
