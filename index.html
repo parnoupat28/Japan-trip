@@ -20,15 +20,23 @@
 
         async function launchApp() {
             try {
-                // 1. วิ่งไปดูดโค้ดดิบจากไฟล์ App.tsx ที่เทอลากลงมาโยน
-                const response = await fetch('App.tsx');
+                // 1. วิ่งไปดึงโค้ดดิบจากไฟล์ App.tsx ที่เทอลากโยนลง Repo
+                // เติมพารามิเตอร์กัน Caching ไฟล์เก่าหน้างานด้วยจ้า
+                const response = await fetch('App.tsx?v=' + Date.now());
                 if (!response.ok) throw new Error('ยังไม่มีไฟล์ App.tsx ใน Repo หรือหาไฟล์ไม่เจอจ้าเทอ');
                 let code = await response.text();
 
-                // 2. ✂️ [จุดแก้ไขสเปกทอง] ลบคำสั่ง import ทุกรูปแบบออกให้เกลี้ยงเกลา 100% ป้องกันบราวเซอร์ช็อค
-                code = code.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, '');
-                code = code.replace(/import\s+['"].*?['"];?/g, '');
-                code = code.replace(/import\s*\([\s\S]*?\)/g, '');
+                // 2. ✂️ [ท่าไม้ตายทลายบั๊ก] ล้างบางคำสั่งบิวด์ของ Canvas ออกให้หมด
+                // แปลงคำว่า import ทุกอันในไฟล์ให้กลายเป็นคอมเมนต์ ( // ) บราวเซอร์จะได้มองข้ามแบบ 100%
+                code = code.split('\n').map(line => {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('import ') || trimmed.startsWith('import{') || trimmed.startsWith('import*')) {
+                        return '// ' + line;
+                    }
+                    return line;
+                }).join('\n');
+
+                // ลบคำว่า export default ออกด้วยจ้า
                 code = code.replace(/export\s+default\s+/g, '');
 
                 // 3. ✨ แปลงร่างทั้ง TypeScript, sub-component และ React พร้อมกันหน้างาน
@@ -36,10 +44,10 @@
                     presets: ['react', 'typescript']
                 }).code;
 
-                // 4. สั่งประมวลผลรันโค้ด
+                // 4. สั่งรันโค้ดสดๆ 
                 eval(transformed);
                 
-                // 5. พ่นคอนเทนต์ลงหน้าจอสมบูรณ์แบบ
+                // 5. พ่นคอนเทนต์แดชบอร์ดลุยหิมะลงจอแบบสมบูรณ์แบบ
                 const root = ReactDOM.createRoot(document.getElementById('root'));
                 root.render(React.createElement(App));
                 
@@ -49,7 +57,7 @@
                     <div class="p-8 text-center text-rose-400">
                         <p class="font-bold">⚠ เกิดข้อผิดพลาดในการรันไฟล์ .tsx จ้าเทอ</p>
                         <p class="text-xs text-slate-500 mt-2">${error.message}</p>
-                        <p class="text-[11px] text-cyan-500 mt-4">💡 วิธีแก้: ลองลากไฟล์ App.tsx โยนลง Repo อีกรอบน้า</p>
+                        <p class="text-[11px] text-cyan-500 mt-4">💡 วิธีแก้: ลองกดปุ่มลากไฟล์ App.tsx โยนทับลง Repo อีกรอบน้า</p>
                     </div>
                 `;
             }
