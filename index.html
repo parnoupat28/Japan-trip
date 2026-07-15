@@ -3,7 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า -<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คัมภีร์ลุยหิมะโทยามะ: นาโกย่า - โทยามะ</title>
+    
+    <!-- โหลดขุมพลัง React, Tailwind, และ Babel เวอร์ชันอัปเกรด -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        async function launchApp() {
+            try {
+                // 1. วิ่งไปดูดโค้ดดิบจากไฟล์ App.tsx ที่เทอลากลงมาโยนตรงๆ
+                const response = await fetch('App.tsx');
+                if (!response.ok) throw new Error('ยังไม่มีไฟล์ App.tsx ใน Repo หรือหาไฟล์ไม่เจอจ้าเทอ');
+                let code = await response.text();
+
+                // 2. ✂️ รื้อถอนระบบมดงานบิวด์ระบบ (import/export) ออกให้เกลี้ยงออโต้
+                code = code.replace(/import\s+[\s\S]*?from\s+['"].*?['"];?/g, '');
+                code = code.replace(/export\s+default\s+/g, '');
+
+                // 3. ✨ แปลงร่างทั้ง TypeScript, sub-component และ React ไปพร้อมๆ กันหน้างาน
+                const transformed = Babel.transform(code, { 
+                    presets: ['react', 'typescript']
+                }).code;
+
+                // 4. สั่งประมวลผลรันโค้ด
+                eval(transformed);
+                
+                // 5. พ่นคอนเทนต์ลงหน้าจอสมบูรณ์แบบ
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(React.createElement(App));
+                
+            } catch (error) {
+                console.error("เลขาตรวจเจอจุดบั๊ก:", error);
+                document.getElementById('root').innerHTML = `
+                    <div class="p-8 text-center text-rose-400">
+                        <p class="font-bold">⚠ เกิดข้อผิดพลาดในการรันไฟล์ .tsx จ้าเทอ</p>
+                        <p class="text-xs text-slate-500 mt-2">${error.message}</p>
+                        <p class="text-[11px] text-cyan-500 mt-4">💡 วิธีแก้: เช็คชื่อไฟล์ว่าตรงเป๊ะว่า 'App.tsx' หรือยัง แล้วลองลากโยนลง Repo ใหม่น้า</p>
+                    </div>
+                `;
+            }
+        }
+
+        launchApp();
+    </script>
+</body>
+</html> โทยามะ</title>
     
     <!-- โหลดขุมพลัง React, Tailwind, และ Babel เวอร์ชันอัปเกรด -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
